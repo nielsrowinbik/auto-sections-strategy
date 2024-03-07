@@ -1,6 +1,6 @@
 {
-  "name": "Auto Sections Strategy",
-  "filename": "auto-sections-strategy.js",
+  "name": "Area Sections Strategy",
+  "filename": "area-sections-strategy.js",
   "homeassistant": "2024.3.0",
   "render_readme": true
 }
