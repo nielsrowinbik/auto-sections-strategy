@@ -1,0 +1,33 @@
+{
+  "name": "auto-sections-strategy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/auto-sections-strategy.ts",
+  "repository": "git@github.com:nielsrowinbik/auto-sections-strategy.git",
+  "author": "Niels Bik <hey@nielsbik.nl>",
+  "license": "MIT",
+  "dependencies": {
+    "custom-card-helpers": "^1.9.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@commitlint/cli": "^18.6.1",
+    "@commitlint/config-conventional": "^18.6.2",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "husky": "^9.0.11",
+    "rollup": "^4.12.0",
+    "rollup-plugin-serve": "^1.0.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "scripts": {
+    "dev": "rollup -c --watch",
+    "build": "rollup -c",
+    "prepare": "husky"
+  },
+  "keywords": []
+}
