@@ -33,6 +33,7 @@
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rollup -c",
+    "prerelease": "pnpm build",
     "release": "release"
   },
   "keywords": []
