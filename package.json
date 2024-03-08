@@ -1,6 +1,6 @@
 {
   "name": "auto-sections-strategy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "src/auto-sections-strategy.ts",
   "repository": "git@github.com:nielsrowinbik/auto-sections-strategy.git",
@@ -24,6 +24,7 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/object.groupby": "^1.0.3",
     "husky": "^9.0.11",
+    "release": "^6.3.1",
     "rollup": "^4.12.0",
     "rollup-plugin-serve": "^1.0.1",
     "tslib": "^2.6.2",
@@ -32,7 +33,7 @@
   "scripts": {
     "dev": "rollup -c --watch",
     "build": "rollup -c",
-    "prepare": "husky"
+    "release": "release"
   },
   "keywords": []
 }
