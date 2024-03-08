@@ -26,6 +26,8 @@ views:
         show_empty: <show_empty>
         unique: <unique>
         card_options:
+          _:
+            type: entity
           light:
             color: amber
           fan.master_bedroom_fan:
@@ -53,4 +55,8 @@ Filters have the following options, and will match any entity fulfilling **ALL**
 
 ### Card options
 
-Within the `card_options` object you may specify specific entity ID's that you wish to alter, or you can specify an entire domain to update at once. If you've specified options for a domain and an entity within that domain, the entity's options will override the domain's options.
+Within the `card_options` object you may specify how to alter the rendered cards. The specificity of your changes are determined by the configuration keys within the `card_options` object and are applied in this order:
+
+1. Configuration within the special `_` key will be applied to all cards.
+2. Specifying keys for a domain such as `light` will apply the configuration to all cards for entities within that domain.
+3. Specifying keys for a specific entity such as `fan.master_bedroom_fan` will apply the configuration to all cards with that specific entity.

@@ -65,17 +65,21 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
               (result, entity) => {
                 if (!isInArea(entity, area, areaDevices)) return result;
 
-                const cardOptions =
-                  (config.card_options?.[entity.entity_id] ||
-                    config.card_options?.[computeDomain(entity.entity_id)]) ??
-                  {};
+                const entityId = entity.entity_id;
+                const domain = computeDomain(entityId);
+
+                const generalCardConfig = config.card_options?.['_'] ?? {};
+                const domainCardConfig = config.card_options?.[domain] ?? {};
+                const entityCardConfig = config.card_options?.[entityId] ?? {};
 
                 return [
                   ...result,
                   {
                     type: 'tile',
                     name: computeName(entity, area.name),
-                    ...(cardOptions && { ...cardOptions }),
+                    ...generalCardConfig,
+                    ...domainCardConfig,
+                    ...entityCardConfig,
                     entity: entity.entity_id,
                   },
                 ];
