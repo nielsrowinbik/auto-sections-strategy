@@ -1,21 +1,17 @@
-import { computeDomain } from 'custom-card-helpers';
 import { HassArea, HassDevice, HassEntity } from './types';
-import { defaultConfig } from '../const';
 
 export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function isDisabled(entity: HassEntity): boolean {
-  return entity.disabled_by !== null;
-}
-
-export function isEnabledDomain(
-  entity: HassEntity,
-  config: typeof defaultConfig
-): boolean {
-  const domain = computeDomain(entity.entity_id);
-  return config.domains[domain]?.hidden === false;
+export function groupBy(list: any[], key: string) {
+  return list.reduce(
+    (hash, obj) => ({
+      ...hash,
+      [obj[key]]: (hash[obj[key]] || []).concat(obj),
+    }),
+    {}
+  );
 }
 
 export function isInArea(

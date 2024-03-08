@@ -82,6 +82,18 @@ export const defaultConfig = {
         type: 'tile',
       },
     },
+    remote: {
+      hidden: false,
+      card: {
+        type: 'tile',
+      },
+    },
+    input_boolean: {
+      hidden: false,
+      card: {
+        type: 'tile',
+      },
+    },
   },
 } as const;
 

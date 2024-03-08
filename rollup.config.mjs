@@ -18,7 +18,7 @@ const serveOptions = {
 const dev = process.env.ROLLUP_WATCH;
 
 export default {
-  input: 'src/area-sections-strategy.ts',
+  input: 'src/auto-sections-strategy.ts',
   output: {
     dir: 'dist',
     format: 'es',

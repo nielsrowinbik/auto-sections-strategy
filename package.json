@@ -1,15 +1,16 @@
 {
-  "name": "area-sections-strategy",
+  "name": "auto-sections-strategy",
   "version": "1.0.0",
   "description": "",
-  "main": "src/area-sections-strategy.ts",
-  "repository": "git@github.com:nielsrowinbik/area-sections-strategy.git",
+  "main": "src/auto-sections-strategy.ts",
+  "repository": "git@github.com:nielsrowinbik/auto-sections-strategy.git",
   "author": "Niels Bik <hey@nielsbik.nl>",
   "license": "MIT",
   "dependencies": {
     "custom-card-helpers": "^1.9.0",
     "home-assistant-js-websocket": "^9.1.0",
     "mergician": "^2.0.1",
+    "object.groupby": "^1.0.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -21,6 +22,7 @@
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
+    "@types/object.groupby": "^1.0.3",
     "husky": "^9.0.11",
     "rollup": "^4.12.0",
     "rollup-plugin-serve": "^1.0.1",
