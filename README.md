@@ -6,7 +6,28 @@ Auto Sections Strategy provides a strategy for Home Assistant to automatically g
 
 ## Getting started
 
-The strategy is easily installable from [HACS](https://hacs.xyz/) (Home Assistant Community Store). Just add this repository as a custom repository and install the strategy. Installing manually is also possible. We'll add more details on how to do this later.
+The strategy is easily installable via [HACS](https://hacs.xyz/) (Home Assistant Community Store), just not via the default repository. Manually installing is also possible.
+
+### Installation through My Home Assistant Link
+
+<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=nielsrowinbik&category=Lovelace&repository=auto-sections-strategy" target="_blank"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
+
+### Installation through custom HACS repository
+
+1. Open HACS (installation instructions are [here](https://hacs.xyz/docs/installation/installation/)).
+2.  Open the menu in the upper-right and select "Custom repositories".
+3.  Enter the repository: `https://github.com/nielsrowinbik/auto-sections-strategy`
+4.  Search for the strategy and install it.
+5.  Add the downloaded resource to your dashboard resources. There's a number of ways to do this, so I won't go into detail.
+
+### Manual installation
+
+1. Download the latest release from [`dist/auto-sections-strategy.js`](https://github.com/nielsrowinbik/auto-sections-strategy/blob/main/dist/auto-sections-strategy.js).
+2. Copy the file to your Home Assistant instance and place it in the `config/www` folder.
+3. Go to Configuration -> Lovelace Dashboards -> Resources -> Add Resource.
+4. Set the URL to `/local/auto-sections-strategy.js` and the Resource Type as `Javascript Module`.
+5. Refresh.
+
 
 ## Usage
 
