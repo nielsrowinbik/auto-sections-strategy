@@ -3,6 +3,7 @@ import { z } from 'zod';
 const filter = z
   .strictObject({
     domain: z.string(),
+    entity_id: z.string(),
     state: z.string(),
   })
   .partial();

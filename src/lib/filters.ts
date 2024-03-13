@@ -15,12 +15,9 @@ type Filters = {
 };
 
 const filters: Filters = {
-  domain: (_, value, entity) => {
-    return match(value, entity.entity_id.split('.')[0]);
-  },
-  state: (_, value, entity) => {
-    return match(value, entity.state);
-  },
+  domain: (_, value, entity) => match(value, entity.entity_id.split('.')[0]),
+  entity_id: (_, value, entity) => match(value, entity.entity_id),
+  state: (_, value, entity) => match(value, entity.state),
 };
 
 export function filter(
