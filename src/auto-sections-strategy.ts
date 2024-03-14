@@ -1,14 +1,27 @@
-import {
+import type {
   LovelaceViewConfig,
-  type HomeAssistant,
+  HomeAssistant,
   LovelaceCardConfig,
-  computeDomain,
 } from 'custom-card-helpers';
 import { configSchema } from './lib/validations';
-import type { HassArea, HassDevice, HassEntity } from './lib/types';
+import type {
+  HassArea,
+  HassContext,
+  HassDevice,
+  HassEntity,
+  LovelaceViewSection,
+} from './lib/types';
 import type { StrategyConfig } from './lib/validations';
 import { filter } from './lib/filters';
-import { computeName, groupBy, isInArea } from './lib/utils';
+import {
+  byKey,
+  computeSectionTitle,
+  findArea,
+  findDevice,
+  findEntity,
+  generateCards,
+} from './lib/utils';
+import get from 'lodash.get';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
   static async generate(
@@ -17,92 +30,86 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
   ): Promise<LovelaceViewConfig> {
     configSchema.parse(config);
 
-    const entities = await hass.callWS<HassEntity[]>({
-      type: 'config/entity_registry/list',
-    });
+    const [allEntities, allAreas, allDevices] = await Promise.all([
+      hass.callWS<HassEntity[]>({ type: 'config/entity_registry/list' }),
+      hass.callWS<HassArea[]>({ type: 'config/area_registry/list' }),
+      hass.callWS<HassDevice[]>({ type: 'config/device_registry/list' }),
+    ]);
 
-    const filtered = entities
+    const context: HassContext = {
+      entity: allEntities,
+      area: allAreas,
+      device: allDevices,
+    };
+
+    const entities = allEntities
       // Apply `include` filters:
       .filter((entity) => {
-        return config.filter?.include
-          ?.map((userFilter) => {
-            return filter(hass, userFilter, entity.entity_id);
-          })
-          .some((val) => val === true);
+        return (
+          config.filter?.include
+            ?.map((userFilter) => filter(hass, userFilter, entity))
+            .some((val) => val === true) ?? false
+        );
       })
       // Apply `exclude` filters:
       .filter((entity) => {
-        return config.filter?.exclude
-          ?.map((userFilter) => {
-            return filter(hass, userFilter, entity.entity_id);
-          })
-          .some((val) => val === false);
+        return (
+          !config.filter?.exclude
+            ?.map((userFilter) => filter(hass, userFilter, entity))
+            .some((val) => val === true) ?? true
+        );
       });
 
-    // TODO: Clean up the mess below here...
-    if (config.group_by === 'area') {
-      const [areas, devices] = await Promise.all([
-        hass.callWS<HassArea[]>({
-          type: 'config/area_registry/list',
-        }),
-        hass.callWS<HassDevice[]>({ type: 'config/device_registry/list' }),
-      ]);
+    const cards = generateCards(entities, config.card_options, context);
 
-      return {
-        // @ts-expect-error
-        type: 'sections',
-        sections: areas
-          .sort((a, b) => a.name.localeCompare(b.name))
-          // FIXME: Explicit any
-          .reduce<any>((result, area) => {
-            const areaDevices = devices.reduce<string[]>((result, device) => {
-              if (device.area_id === area.area_id)
-                return [...result, device.id];
-              return result;
-            }, []);
+    const { group_by } = config;
 
-            const cards = filtered.reduce<LovelaceCardConfig[]>(
-              (result, entity) => {
-                if (!isInArea(entity, area, areaDevices)) return result;
+    // @ts-expect-error
+    const grouped: Record<string, LovelaceCardConfig[]> = Object.groupBy(
+      cards,
+      (card: LovelaceCardConfig) => {
+        const entity = findEntity(allEntities, card.entity);
+        const device = findDevice(allDevices, entity!.device_id);
+        const area = findArea(allAreas, entity!.area_id ?? device?.area_id);
 
-                const entityId = entity.entity_id;
-                const domain = computeDomain(entityId);
+        const context = {
+          entity,
+          device,
+          area,
+        };
 
-                const generalCardConfig = config.card_options?.['_'] ?? {};
-                const domainCardConfig = config.card_options?.[domain] ?? {};
-                const entityCardConfig = config.card_options?.[entityId] ?? {};
+        if (typeof group_by === 'string') return get(context, group_by);
 
-                return [
-                  ...result,
-                  {
-                    type: 'tile',
-                    name: computeName(entity, area.name),
-                    ...generalCardConfig,
-                    ...domainCardConfig,
-                    ...entityCardConfig,
-                    entity: entity.entity_id,
-                  },
-                ];
-              },
-              []
-            );
+        return group_by
+          .map((option) => get(context, option))
+          .filter((option) => !!option)[0];
+      }
+    );
 
-            if (cards.length === 0) return result;
+    return {
+      // @ts-expect-error
+      type: 'sections',
+      sections: Object.entries(grouped)
+        .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
+          if (key === 'undefined' || key === 'null') return sections;
 
-            return [
-              ...result,
-              {
-                title: area.name,
-                type: 'grid',
-                cards,
-              },
-            ];
-          }, []),
-      };
-    }
+          return [
+            ...sections,
+            {
+              title: computeSectionTitle(key, config.group_name, context),
+              type: 'grid',
+              cards,
+            },
+          ];
+        }, [])
+        .sort(byKey('title')),
+    };
 
     return {};
   }
 }
 
-customElements.define('ll-strategy-view-auto-sections', AutoSectionsStrategy);
+customElements.define(
+  'll-strategy-view-auto-sections-dev',
+  AutoSectionsStrategy
+);

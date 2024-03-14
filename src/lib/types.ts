@@ -1,6 +1,4 @@
-export type StrategyConfig = {
-  type: string;
-};
+import { LovelaceCardConfig } from 'custom-card-helpers';
 
 export type HassArea = {
   aliases: unknown[];
@@ -18,7 +16,7 @@ export type HassEntity = {
   entity_category: unknown | null;
   entity_id: string;
   has_entity_name: boolean;
-  hidden_by: unknown | null;
+  hidden_by: 'device' | 'integration' | 'user' | null;
   icon: string | null;
   id: string | null;
   labels: unknown[];
@@ -35,4 +33,16 @@ export type HassDevice = {
   name: string;
   name_by_user: string | null;
   id: string;
+};
+
+export type HassContext = {
+  area: HassArea[];
+  entity: HassEntity[];
+  device: HassDevice[];
+};
+
+export type LovelaceViewSection = {
+  title?: string;
+  type: 'grid';
+  cards: LovelaceCardConfig[];
 };

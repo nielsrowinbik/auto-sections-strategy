@@ -37,6 +37,7 @@ views:
       type: custom:auto-sections
       options:
         group_by: <group_by>
+        group_name: <group_name>
         filter:
           include:
             - <filter>
@@ -57,7 +58,8 @@ views:
 
 ## Options
 
-- `group_by`: **Required**. How to divide the filtered entities among the sections. Defaults to `area`. Possible options: `area` (we'll add more options soon).
+- `group_by`: **Required**. How to divide the filtered entities among the sections.
+- `group_name`: How to determine the section's name.
 - `filter`:
   - `include`: A list of filters specifying which entities to include in the view.
   - `exclude`: A list of filters specifying which entities to exclude from the view.
@@ -65,14 +67,32 @@ views:
 - `unique`: Whether to display an entity more than once if it appears in multiple groups. The default is `false`. Entities within a group will always be deduplicated.
 - `card_options`: Options to add to certain cards.
 
+### Group by
+
+You may either specify a single string or an array of strings here. They should all follow this format: `<domain>.<field>`. These aren't your typical Home Assistant domains though. The supported domains are: `entity`, `area`, `device`. We group by looping through all entities resulting from your configured filters. For each entity, we get the related device and area (both may not exist). By specifying `area.area_id` for example, you're instructing the strategy to group entities by their corresponding area using the `area_id` key.
+
+By suppling multiple strings in an array you're instructing the strategy to consider multiple sources for a group key. It will collect all of them, disregard any undefined/null values, and then use the first one. This is useful for grouping by area, because an entity may not be within an area (`entity.area_id` could be empty), while its device might be (`device.area_id`), hence it's useful to supply both `entity.area_id` and `device.area_id`.
+
+### Group name
+
+By default, the strategy will use the value returned by the `group_by` setting as the section name, but this may not always be what you want.
+
+Setting the group name happens by supplying a single string in a given format: `<domain>.<field1>|<field2>`. What you're configuring here is "what field within a certain domain does the group ID represent (`<domain>.<field1>`), and what field should from that object should we use instead (`<field2>`)?".
+
+In the area example, we group by `area_id`, and so we tell the strategy to find area's by their `area_id`, but use the `name` field for the section title instead, hence our configuration is `area.area_id|name`.
+
+I'm open to suggestions on how to make this easier and/or make more sense, just open an issue.
+
 ### Filters
 
 Both `include` and `exclude` take in a list of filters to determine which entities to display within the view.
 
 Filters have the following options, and will match any entity fulfilling **ALL** options:
 
+- `device`: Match entity's belonging to a certain device
 - `domain`: Match entity domain (such as `light`, `climate`, `media_player`)
 - `state`: Match entity state (such as `on`, `off`, etc.)
+- `hidden`: Match entities that have been hidden from the UI or not
 
 ### Card options
 

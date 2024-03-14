@@ -2,8 +2,10 @@ import { z } from 'zod';
 
 const filter = z
   .strictObject({
+    device: z.string(),
     domain: z.string(),
     entity_id: z.string(),
+    hidden: z.boolean(),
     state: z.string(),
   })
   .partial();
@@ -11,8 +13,12 @@ const filter = z
 export type FilterConfig = z.infer<typeof filter>;
 
 export const configSchema = z.strictObject({
-  type: z.literal('custom:auto-sections'),
-  group_by: z.enum(['area']),
+  type: z.union([
+    z.literal('custom:auto-sections'),
+    z.literal('custom:auto-sections-dev'),
+  ]),
+  group_by: z.union([z.string(), z.array(z.string())]),
+  group_name: z.string().optional(),
   filter: z
     .object({
       include: z.array(filter).optional(),
