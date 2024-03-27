@@ -109,7 +109,4 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
   }
 }
 
-customElements.define(
-  'll-strategy-view-auto-sections-dev',
-  AutoSectionsStrategy
-);
+customElements.define('ll-strategy-view-auto-sections', AutoSectionsStrategy);
