@@ -87,8 +87,9 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
     );
 
     return {
-      // @ts-expect-error
       type: 'sections',
+      ...(config.max_columns && { max_colums: config.max_columns }),
+      // @ts-expect-error
       sections: Object.entries(grouped)
         .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
           if (key === 'undefined' || key === 'null') return sections;

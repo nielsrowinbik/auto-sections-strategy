@@ -17,6 +17,7 @@ export const configSchema = z.strictObject({
     z.literal('custom:auto-sections'),
     z.literal('custom:auto-sections-dev'),
   ]),
+  max_columns: z.number().min(1).max(10).optional(),
   group_by: z.union([z.string(), z.array(z.string())]),
   group_name: z.string().optional(),
   filter: z
