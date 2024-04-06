@@ -21,25 +21,27 @@ export function generateCards(
   card_options: StrategyConfig['card_options'],
   context: HassContext
 ): LovelaceCardConfig[] {
-  return entities.map((entity) => {
-    const { entity_id } = entity;
-    const domain = computeDomain(entity_id);
-    const device = findDevice(context.device, entity!.device_id);
-    const area = findArea(context.area, entity!.area_id ?? device?.area_id);
+  return entities
+    .map((entity) => {
+      const { entity_id } = entity;
+      const domain = computeDomain(entity_id);
+      const device = findDevice(context.device, entity!.device_id);
+      const area = findArea(context.area, entity!.area_id ?? device?.area_id);
 
-    const generalCardConfig = card_options?.['_'] ?? {};
-    const domainCardConfig = card_options?.[domain] ?? {};
-    const entityCardConfig = card_options?.[entity_id] ?? {};
+      const generalCardConfig = card_options?.['_'] ?? {};
+      const domainCardConfig = card_options?.[domain] ?? {};
+      const entityCardConfig = card_options?.[entity_id] ?? {};
 
-    return {
-      type: 'tile',
-      name: computeName(entity, area?.name ?? ''),
-      ...generalCardConfig,
-      ...domainCardConfig,
-      ...entityCardConfig,
-      entity: entity.entity_id,
-    };
-  });
+      return {
+        type: 'tile',
+        name: computeName(entity, area?.name ?? ''),
+        ...generalCardConfig,
+        ...domainCardConfig,
+        ...entityCardConfig,
+        entity: entity.entity_id,
+      };
+    })
+    .sort(byKey('name'));
 }
 
 export function byKey(key: string) {
