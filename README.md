@@ -15,10 +15,10 @@ The strategy is easily installable via [HACS](https://hacs.xyz/) (Home Assistant
 ### Installation through custom HACS repository
 
 1. Open HACS (installation instructions are [here](https://hacs.xyz/docs/installation/installation/)).
-2.  Open the menu in the upper-right and select "Custom repositories".
-3.  Enter the repository: `https://github.com/nielsrowinbik/auto-sections-strategy`
-4.  Search for the strategy and install it.
-5.  Add the downloaded resource to your dashboard resources. There's a number of ways to do this, so I won't go into detail.
+2. Open the menu in the upper-right and select "Custom repositories".
+3. Enter the repository: `https://github.com/nielsrowinbik/auto-sections-strategy`
+4. Search for the strategy and install it.
+5. Add the downloaded resource to your dashboard resources. There's a number of ways to do this, so I won't go into detail.
 
 ### Manual installation
 
@@ -27,7 +27,6 @@ The strategy is easily installable via [HACS](https://hacs.xyz/) (Home Assistant
 3. Go to Configuration -> Lovelace Dashboards -> Resources -> Add Resource.
 4. Set the URL to `/local/auto-sections-strategy.js` and the Resource Type as `Javascript Module`.
 5. Refresh.
-
 
 ## Usage
 
@@ -38,6 +37,7 @@ views:
       options:
         group_by: <group_by>
         group_name: <group_name>
+        max_columns: <number between 1 and 10>
         filter:
           include:
             - <filter>
