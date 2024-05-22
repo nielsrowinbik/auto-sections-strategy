@@ -9,8 +9,8 @@ dependencies:
     specifier: ^1.9.0
     version: 1.9.0
   home-assistant-js-websocket:
-    specifier: ^9.1.0
-    version: 9.1.0
+    specifier: ^9.3.0
+    version: 9.3.0
   lodash.get:
     specifier: ^4.4.2
     version: 4.4.2
@@ -1662,8 +1662,8 @@ packages:
     resolution: {integrity: sha512-TnZFzF4mn5F/v0XKUTK2GMQXrn/+eQpgaSDSELl6U0HSwSbFwRhGWLz330YT+hiKMspDflamsye//RPL+zwhDw==}
     dev: false
 
-  /home-assistant-js-websocket@9.1.0:
-    resolution: {integrity: sha512-R2LEMX0h5r6lfDydrobgHaA/HkZv45B8UHC96j9oLPJ1qETSfSmWLy8AF/RthjT+6kWWnZDlt7VU1EfNVT0wuQ==}
+  /home-assistant-js-websocket@9.3.0:
+    resolution: {integrity: sha512-DB2jCo57+0OIOhF3zMjHcfZnRyzbWBdeT24LwTh4pO75vaIiXbdaWwZFEFukHOz3K8qTFmeUnLemHV3Fspib+A==}
     dev: false
 
   /homedir-polyfill@1.0.3:
