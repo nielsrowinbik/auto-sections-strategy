@@ -87,27 +87,32 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
       }
     );
 
+    const sections = Object.entries(grouped)
+      .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
+        if (key === 'undefined' || key === 'null') return sections;
+
+        return [
+          ...sections,
+          {
+            title: computeSectionTitle(key, config.group_name, context),
+            type: 'grid',
+            cards,
+          },
+        ];
+      }, [])
+      .sort(byKey('title'));
+
+    if (sections.length === 0)
+      console.warn(
+        'Auto Sections Strategy rendered an empty view. Please check your configuration.'
+      );
+
     return {
       // @ts-expect-error
       type: 'sections',
       max_columns: config.max_columns ?? 4,
-      sections: Object.entries(grouped)
-        .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
-          if (key === 'undefined' || key === 'null') return sections;
-
-          return [
-            ...sections,
-            {
-              title: computeSectionTitle(key, config.group_name, context),
-              type: 'grid',
-              cards,
-            },
-          ];
-        }, [])
-        .sort(byKey('title')),
+      sections,
     };
-
-    return {};
   }
 }
 
