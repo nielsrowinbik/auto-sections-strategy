@@ -108,7 +108,11 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
       // @ts-expect-error
       type: 'sections',
       max_columns: config.max_columns ?? 4,
-      sections,
+      sections: [
+        ...(config.sections?.top ?? []),
+        ...sections,
+        ...(config.sections?.bottom ?? []),
+      ],
     };
   }
 }

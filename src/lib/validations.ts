@@ -13,6 +13,12 @@ const filter = z
 
 export type FilterConfig = z.infer<typeof filter>;
 
+const section = z.strictObject({
+  title: z.string().optional(),
+  type: z.literal('grid'),
+  cards: z.array(z.any()),
+});
+
 export const configSchema = z.strictObject({
   type: z.union([
     z.literal('custom:auto-sections'),
@@ -30,6 +36,13 @@ export const configSchema = z.strictObject({
   show_empty: z.boolean().default(false),
   unique: z.boolean().default(false),
   card_options: z.record(z.any()).optional(),
+  sections: z
+    .strictObject({
+      top: z.array(section),
+      bottom: z.array(section),
+    })
+    .partial()
+    .optional(),
 });
 
 export type StrategyConfig = z.infer<typeof configSchema>;

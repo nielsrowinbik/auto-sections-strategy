@@ -54,6 +54,11 @@ views:
             color: amber
           fan.master_bedroom_fan:
             type: custom:mushroom-fan-card
+        sections:
+          top:
+            - <section_config>
+          bottom:
+            - <section_config>
 ```
 
 ## Options
@@ -66,6 +71,7 @@ views:
 - `show_empty`: Whether to display a section if it has no entities in it. The default is `false`.
 - `unique`: Whether to display an entity more than once if it appears in multiple groups. The default is `false`. Entities within a group will always be deduplicated.
 - `card_options`: Options to add to certain cards.
+- `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
 
 ### Group by
 
