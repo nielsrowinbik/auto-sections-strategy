@@ -15,6 +15,7 @@ import type { StrategyConfig } from './lib/validations';
 import { filter } from './lib/filters';
 import {
   byKey,
+  computeEntityContext,
   computeSectionTitle,
   findArea,
   findDevice,
@@ -37,7 +38,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
       hass.callWS<HassDevice[]>({ type: 'config/device_registry/list' }),
     ]);
 
-    const context: HassContext = {
+    const hassContext: HassContext = {
       entity: allEntities,
       area: allAreas,
       device: allDevices,
@@ -46,22 +47,26 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
     const entities = allEntities
       // Apply `include` filters:
       .filter((entity) => {
+        const context = computeEntityContext(entity.entity_id, hassContext);
+
         return (
           config.filter?.include
-            ?.map((userFilter) => filter(hass, userFilter, entity))
+            ?.map((userFilter) => filter(hass, userFilter, context))
             .some((val) => val === true) ?? false
         );
       })
       // Apply `exclude` filters:
       .filter((entity) => {
+        const context = computeEntityContext(entity.entity_id, hassContext);
+
         return (
           !config.filter?.exclude
-            ?.map((userFilter) => filter(hass, userFilter, entity))
+            ?.map((userFilter) => filter(hass, userFilter, context))
             .some((val) => val === true) ?? true
         );
       });
 
-    const cards = generateCards(entities, config.card_options, context);
+    const cards = generateCards(entities, config.card_options, hassContext);
 
     const { group_by } = config;
 
@@ -69,15 +74,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
     const grouped: Record<string, LovelaceCardConfig[]> = Object.groupBy(
       cards,
       (card: LovelaceCardConfig) => {
-        const entity = findEntity(allEntities, card.entity);
-        const device = findDevice(allDevices, entity!.device_id);
-        const area = findArea(allAreas, entity!.area_id ?? device?.area_id);
-
-        const context = {
-          entity,
-          device,
-          area,
-        };
+        const context = computeEntityContext(card.entity, hassContext);
 
         if (typeof group_by === 'string') return get(context, group_by);
 
@@ -94,7 +91,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
         return [
           ...sections,
           {
-            title: computeSectionTitle(key, config.group_name, context),
+            title: computeSectionTitle(key, config.group_name, hassContext),
             type: 'grid',
             cards,
           },

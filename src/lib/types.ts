@@ -41,6 +41,12 @@ export type HassContext = {
   device: HassDevice[];
 };
 
+export type EntityContext = {
+  area: HassArea | undefined;
+  entity: HassEntity | undefined;
+  device: HassDevice | undefined;
+};
+
 export type LovelaceViewSection = {
   title?: string;
   type: 'grid';

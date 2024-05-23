@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 const filter = z
   .strictObject({
+    area: z.string(),
     device: z.string(),
     domain: z.string(),
     entity_id: z.string(),

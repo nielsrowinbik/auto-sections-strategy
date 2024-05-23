@@ -1,6 +1,12 @@
 import { computeDomain } from 'custom-card-helpers';
 import type { LovelaceCardConfig } from 'custom-card-helpers';
-import { HassArea, HassContext, HassDevice, HassEntity } from './types';
+import type {
+  EntityContext,
+  HassArea,
+  HassContext,
+  HassDevice,
+  HassEntity,
+} from './types';
 import type { StrategyConfig } from './validations';
 import get from 'lodash.get';
 
@@ -85,4 +91,19 @@ export function computeSectionTitle(
   const title = ctx.find((obj: any) => obj[key] === sectionKey)[field];
 
   return title ?? sectionKey;
+}
+
+export function computeEntityContext(
+  entity_id: string,
+  context: HassContext
+): EntityContext {
+  const entity = findEntity(context.entity, entity_id);
+  const device = findDevice(context.device, entity?.device_id);
+  const area = findArea(context.area, entity?.area_id ?? device?.area_id);
+
+  return {
+    entity,
+    device,
+    area,
+  };
 }

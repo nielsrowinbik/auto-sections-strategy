@@ -1,36 +1,36 @@
 import { HomeAssistant, computeDomain } from 'custom-card-helpers';
 import { FilterConfig } from './validations';
-import type { HassEntity } from './types';
+import type { EntityContext } from './types';
 
 type Filters = {
   [K in keyof Required<FilterConfig>]: (
     hass: HomeAssistant,
     value: any,
-    entity: HassEntity
+    context: EntityContext
   ) => boolean;
 };
 
 const filters: Filters = {
-  device: (_, value, { device_id }) => value === device_id,
-  domain: (_, value, { entity_id }) => value === computeDomain(entity_id),
-  entity_id: (_, value, { entity_id }) => value === entity_id,
-  hidden: (_, value, { hidden_by }) => value === (hidden_by !== null),
-  state: ({ states }, value, { entity_id }) =>
-    value === states[entity_id].state,
+  area: (_, value, { entity, device }) =>
+    [entity!.area_id, device?.area_id].includes(value),
+  device: (_, value, { entity }) => value === entity!.device_id,
+  domain: (_, value, { entity }) => value === computeDomain(entity!.entity_id),
+  entity_id: (_, value, { entity }) => value === entity!.entity_id,
+  hidden: (_, value, { entity }) => value === (entity!.hidden_by !== null),
+  state: ({ states }, value, { entity }) =>
+    value === states[entity!.entity_id].state,
 };
 
 export function filter(
   hass: HomeAssistant,
   config: FilterConfig,
-  entity: HassEntity
+  context: EntityContext
 ): boolean {
-  const { entity_id } = entity;
-
-  if (!hass.states[entity_id]) return false;
+  if (!context.entity || !hass.states[context.entity.entity_id]) return false;
 
   return Object.entries(config)
     .map(([filter, value]) => {
-      return filters[filter]?.(hass, value, entity);
+      return filters[filter]?.(hass, value, context);
     })
     .every((res) => res === true);
 }
