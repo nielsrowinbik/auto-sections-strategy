@@ -45,8 +45,6 @@ views:
           exclude:
             - <filter>
             - <filter>
-        show_empty: <show_empty>
-        unique: <unique>
         card_options:
           _:
             type: entity
@@ -68,8 +66,6 @@ views:
 - `filter`:
   - `include`: A list of filters specifying which entities to include in the view.
   - `exclude`: A list of filters specifying which entities to exclude from the view.
-- `show_empty`: Whether to display a section if it has no entities in it. The default is `false`.
-- `unique`: Whether to display an entity more than once if it appears in multiple groups. The default is `false`. Entities within a group will always be deduplicated.
 - `card_options`: Options to add to certain cards.
 - `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
 
