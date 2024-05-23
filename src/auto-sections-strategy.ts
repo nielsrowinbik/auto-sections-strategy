@@ -20,7 +20,6 @@ import {
   generateCards,
 } from './lib/utils';
 import get from 'lodash.get';
-import { version } from '../package.json';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
   static async generate(
@@ -117,7 +116,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
 customElements.define('ll-strategy-view-auto-sections', AutoSectionsStrategy);
 
 console.info(
-  '%c Auto Sections Strategy %c v'.concat(version, ' '),
+  `%c Auto Sections Strategy %c is installed!`,
   'color: white; background: coral; font-weight: 700;',
   'color: coral; background: white; font-weight: 700;'
 );
