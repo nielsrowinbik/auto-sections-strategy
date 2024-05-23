@@ -17,9 +17,6 @@ import {
   byKey,
   computeEntityContext,
   computeSectionTitle,
-  findArea,
-  findDevice,
-  findEntity,
   generateCards,
 } from './lib/utils';
 import get from 'lodash.get';
