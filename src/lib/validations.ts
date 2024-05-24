@@ -33,6 +33,7 @@ export const configSchema = z.strictObject({
       exclude: z.array(filter).optional(),
     })
     .optional(),
+  show_ungrouped: z.union([z.literal(false), z.string()]).default(false),
   card_options: z.record(z.any()).optional(),
   sections: z
     .strictObject({

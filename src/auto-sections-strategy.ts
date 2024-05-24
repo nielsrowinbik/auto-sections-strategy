@@ -23,10 +23,10 @@ import get from 'lodash.get';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
   static async generate(
-    config: StrategyConfig,
+    userConfig: StrategyConfig,
     hass: HomeAssistant
   ): Promise<LovelaceViewConfig> {
-    configSchema.parse(config);
+    const config = configSchema.parse(userConfig);
 
     const [allEntities, allAreas, allDevices] = await Promise.all([
       hass.callWS<HassEntity[]>({ type: 'config/entity_registry/list' }),
@@ -82,7 +82,18 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
 
     const sections = Object.entries(grouped)
       .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
-        if (key === 'undefined' || key === 'null') return sections;
+        if (key === 'undefined' || key === 'null') {
+          if (config.show_ungrouped === false) return sections;
+
+          return [
+            ...sections,
+            {
+              title: config.show_ungrouped,
+              type: 'grid',
+              cards,
+            },
+          ];
+        }
 
         return [
           ...sections,

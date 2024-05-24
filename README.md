@@ -45,6 +45,7 @@ views:
           exclude:
             - <filter>
             - <filter>
+        show_ungrouped: <show_ungrouped>
         card_options:
           _:
             type: entity
@@ -66,6 +67,7 @@ views:
 - `filter`:
   - `include`: A list of filters specifying which entities to include in the view.
   - `exclude`: A list of filters specifying which entities to exclude from the view.
+- `show_ungrouped`: Show or hide entities that were included by the filter rules but could not be grouped using the `group_by` setting. Defaults to `false`.
 - `card_options`: Options to add to certain cards.
 - `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
 
