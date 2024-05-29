@@ -14,12 +14,12 @@ import type {
 import type { StrategyConfig } from './lib/validations';
 import { filter } from './lib/filters';
 import {
-  byKey,
   computeEntityContext,
   computeSectionTitle,
   generateCards,
 } from './lib/utils';
 import get from 'lodash.get';
+import { sort } from './lib/sorts';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
   static async generate(
@@ -80,7 +80,10 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
       }
     );
 
+    const { method, direction, ...options } = config.sort;
+
     const sections = Object.entries(grouped)
+      .sort(sort(method, direction, options))
       .reduce<LovelaceViewSection[]>((sections, [key, cards]) => {
         if (key === 'undefined' || key === 'null') {
           if (config.show_ungrouped === false) return sections;
@@ -103,8 +106,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
             cards,
           },
         ];
-      }, [])
-      .sort(byKey('title'));
+      }, []);
 
     if (sections.length === 0)
       console.warn(

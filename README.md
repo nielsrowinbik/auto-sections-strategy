@@ -46,6 +46,7 @@ views:
             - <filter>
             - <filter>
         show_ungrouped: <show_ungrouped>
+        sort: <sort>
         card_options:
           _:
             type: entity
@@ -98,6 +99,35 @@ Filters have the following options, and will match any entity fulfilling **ALL**
 - `domain`: Match entity domain (such as `light`, `climate`, `media_player`)
 - `state`: Match entity state (such as `on`, `off`, etc.)
 - `hidden`: Match entities that have been hidden from the UI or not
+
+### Sort
+
+By default, the generated sections are sorted alphabetically by their key (resulting from the `group_by` configuration). You can change the direction or manually sort the generated sections through priority sorting.
+
+#### Alphabetically
+
+Set the method to `alphabetical` and optionally set the direction to either `ascending` or `descending`. There are no other options to configure.
+
+```yaml
+sort:
+  method: alphabetical
+  direction: ascending # or descending
+```
+
+#### Priority
+
+Set the method to `priority` and optionally set the direction to either `ascending` or `descending`. Then, provide an object of priorities to consider, like so:
+
+```yaml
+sort:
+  method: priority
+  direction: ascending # or descending
+  priorities:
+    living_room: 1
+    bedroom: 2
+```
+
+Any section that is not provided a priority through the above configuration will be assigned a priority of 9999.
 
 ### Card options
 

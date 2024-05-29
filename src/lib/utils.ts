@@ -50,9 +50,14 @@ export function generateCards(
     .sort(byKey('name'));
 }
 
-export function byKey(key: string) {
-  return function sort(a: any, b: any) {
-    return a[key].localeCompare(b[key]);
+export function byKey(
+  key: string,
+  direction: 'ascending' | 'descending' = 'ascending'
+) {
+  return function sort(a: Record<string, any>, b: Record<string, any>) {
+    if (direction === 'ascending')
+      return (a[key] as string).localeCompare(b[key]);
+    return (b[key] as string).localeCompare(a[key]);
   };
 }
 

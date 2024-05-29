@@ -19,6 +19,10 @@ const section = z.strictObject({
   cards: z.array(z.any()),
 });
 
+const direction = z
+  .union([z.literal('ascending'), z.literal('descending')])
+  .default('ascending');
+
 export const configSchema = z.strictObject({
   type: z.union([
     z.literal('custom:auto-sections'),
@@ -34,6 +38,19 @@ export const configSchema = z.strictObject({
     })
     .optional(),
   show_ungrouped: z.union([z.literal(false), z.string()]).default(false),
+  sort: z
+    .union([
+      z.strictObject({
+        method: z.literal('alphabetical'),
+        direction,
+      }),
+      z.strictObject({
+        method: z.literal('priority'),
+        direction,
+        priorities: z.record(z.number()),
+      }),
+    ])
+    .default({ method: 'alphabetical', direction: 'ascending' }),
   card_options: z.record(z.any()).optional(),
   sections: z
     .strictObject({
