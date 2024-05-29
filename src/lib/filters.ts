@@ -11,11 +11,11 @@ type Filters = {
 };
 
 const filters: Filters = {
-  area: (_, value, { entity, device }) =>
-    [entity!.area_id, device?.area_id].includes(value),
+  area: (_, value, { area }) => value === area?.area_id,
   device: (_, value, { entity }) => value === entity!.device_id,
   domain: (_, value, { entity }) => value === computeDomain(entity!.entity_id),
   entity_id: (_, value, { entity }) => value === entity!.entity_id,
+  floor: (_, value, { floor }) => value === floor?.floor_id,
   hidden: (_, value, { entity }) => value === (entity!.hidden_by !== null),
   state: ({ states }, value, { entity }) =>
     value === states[entity!.entity_id].state,

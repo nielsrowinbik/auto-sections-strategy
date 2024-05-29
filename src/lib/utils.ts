@@ -6,6 +6,7 @@ import type {
   HassContext,
   HassDevice,
   HassEntity,
+  HassFloor,
 } from './types';
 import type { StrategyConfig } from './validations';
 import get from 'lodash.get';
@@ -79,6 +80,13 @@ export function findArea(
   return allAreas.find((obj) => obj.area_id === areaId);
 }
 
+export function findFloor(
+  allFloors: HassFloor[],
+  floorId: string | null | undefined
+) {
+  return allFloors.find((obj) => obj.floor_id === floorId);
+}
+
 export function computeSectionTitle(
   sectionKey: string,
   config: StrategyConfig['group_name'],
@@ -105,10 +113,12 @@ export function computeEntityContext(
   const entity = findEntity(context.entity, entity_id);
   const device = findDevice(context.device, entity?.device_id);
   const area = findArea(context.area, entity?.area_id ?? device?.area_id);
+  const floor = findFloor(context.floor, area?.floor_id);
 
   return {
     entity,
     device,
     area,
+    floor,
   };
 }

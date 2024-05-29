@@ -6,6 +6,7 @@ const filter = z
     device: z.string(),
     domain: z.string(),
     entity_id: z.string(),
+    floor: z.string(),
     hidden: z.boolean(),
     state: z.string(),
   })

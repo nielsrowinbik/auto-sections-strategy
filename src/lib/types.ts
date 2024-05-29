@@ -6,6 +6,7 @@ export type HassArea = {
   icon: string | null;
   name: string;
   picture: string | null;
+  floor_id: string | null;
 };
 
 export type HassEntity = {
@@ -35,16 +36,26 @@ export type HassDevice = {
   id: string;
 };
 
+export type HassFloor = {
+  aliases: unknown[];
+  floor_id: string;
+  icon: string | null;
+  level: number;
+  name: string;
+};
+
 export type HassContext = {
   area: HassArea[];
   entity: HassEntity[];
   device: HassDevice[];
+  floor: HassFloor[];
 };
 
 export type EntityContext = {
   area: HassArea | undefined;
   entity: HassEntity | undefined;
   device: HassDevice | undefined;
+  floor: HassFloor | undefined;
 };
 
 export type LovelaceViewSection = {

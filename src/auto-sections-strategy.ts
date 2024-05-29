@@ -9,6 +9,7 @@ import type {
   HassContext,
   HassDevice,
   HassEntity,
+  HassFloor,
   LovelaceViewSection,
 } from './lib/types';
 import type { StrategyConfig } from './lib/validations';
@@ -28,16 +29,18 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
   ): Promise<LovelaceViewConfig> {
     const config = configSchema.parse(userConfig);
 
-    const [allEntities, allAreas, allDevices] = await Promise.all([
+    const [allEntities, allAreas, allDevices, allFloors] = await Promise.all([
       hass.callWS<HassEntity[]>({ type: 'config/entity_registry/list' }),
       hass.callWS<HassArea[]>({ type: 'config/area_registry/list' }),
       hass.callWS<HassDevice[]>({ type: 'config/device_registry/list' }),
+      hass.callWS<HassFloor[]>({ type: 'config/floor_registry/list' }),
     ]);
 
     const hassContext: HassContext = {
       entity: allEntities,
       area: allAreas,
       device: allDevices,
+      floor: allFloors,
     };
 
     const entities = allEntities
