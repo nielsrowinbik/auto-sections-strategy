@@ -95,8 +95,8 @@ Both `include` and `exclude` take in a list of filters to determine which entiti
 Filters have the following options, and will match any entity fulfilling **ALL** options:
 
 - `area`: Match entities belonging to a certain area (this does also take their device's area into consideration)
+- `attribute`: Expects an object of attributes. Will match for entities matching all attributes exactly. Useful for filtering by `device_class`, for example
 - `device`: Match entities belonging to a certain device
-- `device_class`: Match entities belonging to a certain device class
 - `domain`: Match entity domain (such as `light`, `climate`, `media_player`)
 - `floor`: Match entities belonging to a certain floor
 - `state`: Match entity state (such as `on`, `off`, etc.)

@@ -3,8 +3,8 @@ import { z } from 'zod';
 const filter = z
   .strictObject({
     area: z.string(),
+    attribute: z.record(z.string()),
     device: z.string(),
-    device_class: z.string(),
     domain: z.string(),
     entity_id: z.string(),
     floor: z.string(),
