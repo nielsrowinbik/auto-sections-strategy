@@ -4,6 +4,7 @@ const filter = z
   .strictObject({
     area: z.string(),
     device: z.string(),
+    device_class: z.string(),
     domain: z.string(),
     entity_id: z.string(),
     floor: z.string(),

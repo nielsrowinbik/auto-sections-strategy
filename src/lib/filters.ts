@@ -13,6 +13,8 @@ type Filters = {
 const filters: Filters = {
   area: (_, value, { area }) => value === area?.area_id,
   device: (_, value, { entity }) => value === entity!.device_id,
+  device_class: (hass, value, { entity }) =>
+    value === hass.states[entity!.entity_id].attributes.device_class,
   domain: (_, value, { entity }) => value === computeDomain(entity!.entity_id),
   entity_id: (_, value, { entity }) => value === entity!.entity_id,
   floor: (_, value, { floor }) => value === floor?.floor_id,
