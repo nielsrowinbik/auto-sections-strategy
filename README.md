@@ -96,7 +96,9 @@ Filters have the following options, and will match any entity fulfilling **ALL**
 
 - `area`: Match entities belonging to a certain area (this does also take their device's area into consideration)
 - `device`: Match entities belonging to a certain device
+- `device_class`: Match entities belonging to a certain device class
 - `domain`: Match entity domain (such as `light`, `climate`, `media_player`)
+- `floor`: Match entities belonging to a certain floor
 - `state`: Match entity state (such as `on`, `off`, etc.)
 - `hidden`: Match entities that have been hidden from the UI or not
 
