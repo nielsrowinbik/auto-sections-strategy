@@ -54,6 +54,7 @@ export const configSchema = z.strictObject({
     ])
     .default({ method: 'alphabetical', direction: 'ascending' }),
   card_options: z.record(z.any()).optional(),
+  badges: z.array(z.any()).optional(),
   sections: z
     .strictObject({
       top: z.array(section),

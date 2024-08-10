@@ -125,6 +125,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
         ...sections,
         ...(config.sections?.bottom ?? []),
       ],
+      badges: config.badges ?? [],
     };
   }
 }

@@ -59,6 +59,8 @@ views:
             - <section_config>
           bottom:
             - <section_config>
+        badges:
+          - <badge_config>
 ```
 
 ## Options
@@ -71,6 +73,7 @@ views:
 - `show_ungrouped`: Show or hide entities that were included by the filter rules but could not be grouped using the `group_by` setting. Defaults to `false`.
 - `card_options`: Options to add to certain cards.
 - `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
+- `sections`: Add badges to your automatically generated dashboard.
 
 ### Group by
 
