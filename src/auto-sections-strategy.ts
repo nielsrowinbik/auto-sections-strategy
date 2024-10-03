@@ -96,7 +96,14 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
             {
               title: config.show_ungrouped,
               type: 'grid',
-              cards,
+              cards: [
+                {
+                  type: 'heading',
+                  heading: config.show_ungrouped,
+                  heading_style: 'title',
+                },
+                ...cards,
+              ],
             },
           ];
         }
@@ -106,7 +113,18 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
           {
             title: computeSectionTitle(key, config.group_name, hassContext),
             type: 'grid',
-            cards,
+            cards: [
+              {
+                type: 'heading',
+                heading: computeSectionTitle(
+                  key,
+                  config.group_name,
+                  hassContext
+                ),
+                heading_style: 'title',
+              },
+              ...cards,
+            ],
           },
         ];
       }, []);
