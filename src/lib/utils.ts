@@ -15,8 +15,14 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function computeName(entity: HassEntity, areaName: string) {
-  const entityName = entity.name ?? entity.original_name;
+export function computeName(
+  entity: HassEntity,
+  context: { area?: HassArea; device?: HassDevice }
+) {
+  const { area, device } = context;
+  const areaName = area?.name ?? '';
+  const entityName =
+    entity.name ?? entity.original_name ?? device?.name_by_user ?? device?.name;
 
   if (!entityName) return '';
 
@@ -41,7 +47,7 @@ export function generateCards(
 
       return {
         type: 'tile',
-        name: computeName(entity, area?.name ?? ''),
+        name: computeName(entity, { area, device }),
         ...generalCardConfig,
         ...domainCardConfig,
         ...entityCardConfig,
