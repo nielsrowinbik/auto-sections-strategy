@@ -73,7 +73,7 @@ views:
 - `show_ungrouped`: Show or hide entities that were included by the filter rules but could not be grouped using the `group_by` setting. Defaults to `false`.
 - `card_options`: Options to add to certain cards.
 - `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
-- `sections`: Add badges to your automatically generated dashboard.
+- `badges`: Add badges to your automatically generated dashboard.
 
 ### Group by
 
@@ -104,6 +104,7 @@ Filters have the following options, and will match any entity fulfilling **ALL**
 - `floor`: Match entities belonging to a certain floor
 - `state`: Match entity state (such as `on`, `off`, etc.)
 - `hidden`: Match entities that have been hidden from the UI or not
+- `label`: Match entities that have a certain label
 
 ### Sort
 

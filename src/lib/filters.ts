@@ -23,6 +23,7 @@ const filters: Filters = {
   hidden: (_, value, { entity }) => value === (entity!.hidden_by !== null),
   state: ({ states }, value, { entity }) =>
     value === states[entity!.entity_id].state,
+  label: (_, value, { entity }) => entity!.labels.indexOf(value) !== -1,
 };
 
 export function filter(

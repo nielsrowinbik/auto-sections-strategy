@@ -10,6 +10,7 @@ const filter = z
     floor: z.string(),
     hidden: z.boolean(),
     state: z.string(),
+    label: z.string(),
   })
   .partial();
 
