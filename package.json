@@ -39,5 +39,6 @@
     "dev": "rollup -c --watch",
     "build": "rollup -c"
   },
-  "keywords": []
+  "keywords": [],
+  "packageManager": "pnpm@10.12.4"
 }
