@@ -61,7 +61,7 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
         return (
           !config.filter?.exclude
             ?.map((userFilter) => filter(hass, userFilter, context))
-            .some((val) => val === true) ?? true
+            .some((val) => val === true)
         );
       });
 
