@@ -1,6 +1,6 @@
 {
   "name": "auto-sections-strategy",
-  "version": "0.11.0",
+  "version": "0.2.2",
   "description": "",
   "main": "src/auto-sections-strategy.ts",
   "repository": "git@github.com:nielsrowinbik/auto-sections-strategy.git",
