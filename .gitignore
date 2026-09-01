@@ -1,4 +1,2 @@
 node_modules
-
-# Only ever produced by `pnpm dev`; the release build is the one that ships.
-dist/auto-sections-strategy-dev.js
+dist

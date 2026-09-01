@@ -1,6 +1,7 @@
 {
   "name": "Auto Sections Strategy",
   "filename": "auto-sections-strategy.js",
+  "hide_default_branch": true,
   "homeassistant": "2024.10.0",
   "render_readme": true
 }
