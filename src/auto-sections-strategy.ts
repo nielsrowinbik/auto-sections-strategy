@@ -20,6 +20,9 @@ import {
 } from './lib/utils';
 import { sort } from './lib/sorts';
 
+// Injected by rollup; see `intro` in rollup.config.mjs.
+declare const __DEV__: boolean;
+
 class AutoSectionsStrategy extends HTMLTemplateElement {
   static registryDependencies = REGISTRY_DEPENDENCIES;
 
@@ -141,10 +144,12 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
   }
 }
 
-customElements.define('ll-strategy-view-auto-sections', AutoSectionsStrategy);
+const type = __DEV__ ? 'auto-sections-dev' : 'auto-sections';
+
+customElements.define(`ll-strategy-view-${type}`, AutoSectionsStrategy);
 
 console.info(
-  `%c Auto Sections Strategy %c is installed!`,
+  `%c Auto Sections Strategy %c is installed as custom:${type}!`,
   'color: white; background: coral; font-weight: 700;',
   'color: coral; background: white; font-weight: 700;'
 );

@@ -23,6 +23,11 @@ export default {
     dir: 'dist',
     format: 'es',
     inlineDynamicImports: true,
+    // The dev build gets its own filename and registers itself under its own
+    // element name, so it can sit next to the installed release rather than
+    // racing it to claim the same one.
+    entryFileNames: dev ? 'auto-sections-strategy-dev.js' : '[name].js',
+    intro: `const __DEV__ = ${Boolean(dev)};`,
   },
   plugins: [
     typescript({ declaration: false }),
