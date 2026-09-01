@@ -1,3 +1,10 @@
+# [0.5.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.4.0...v0.5.0) (2026-09-01)
+
+
+### Features
+
+* filter on lists, templates and group members ([#27](https://github.com/nielsrowinbik/auto-sections-strategy/issues/27)) ([1c5da08](https://github.com/nielsrowinbik/auto-sections-strategy/commit/1c5da0889dad7dd909d72303fbc6bfb19cae92fa)), closes [#18](https://github.com/nielsrowinbik/auto-sections-strategy/issues/18) [#21](https://github.com/nielsrowinbik/auto-sections-strategy/issues/21)
+
 # [0.4.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.3.0...v0.4.0) (2026-09-01)
 
 
