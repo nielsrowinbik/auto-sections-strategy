@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.3.0...v0.4.0) (2026-09-01)
+
+
+### Features
+
+* make group name stripping optional ([#26](https://github.com/nielsrowinbik/auto-sections-strategy/issues/26)) ([574a8ef](https://github.com/nielsrowinbik/auto-sections-strategy/commit/574a8efa4c5aa4023a1341a0c92a7b925b6b9602)), closes [#19](https://github.com/nielsrowinbik/auto-sections-strategy/issues/19)
+
 # [0.3.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.2.2...v0.3.0) (2026-09-01)
 
 
