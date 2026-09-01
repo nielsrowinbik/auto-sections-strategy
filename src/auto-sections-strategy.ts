@@ -19,7 +19,7 @@ import {
   computeSectionTitle,
   generateCards,
 } from './lib/utils';
-import get from 'lodash.get';
+import { get } from 'lodash-es';
 import { sort } from './lib/sorts';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {

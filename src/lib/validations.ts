@@ -3,7 +3,7 @@ import { z } from 'zod';
 const filter = z
   .strictObject({
     area: z.string(),
-    attribute: z.record(z.string()),
+    attribute: z.record(z.string(), z.string()),
     device: z.string(),
     domain: z.string(),
     entity_id: z.string(),
@@ -50,11 +50,11 @@ export const configSchema = z.strictObject({
       z.strictObject({
         method: z.literal('priority'),
         direction,
-        priorities: z.record(z.number()),
+        priorities: z.record(z.string(), z.number()),
       }),
     ])
     .default({ method: 'alphabetical', direction: 'ascending' }),
-  card_options: z.record(z.any()).optional(),
+  card_options: z.record(z.string(), z.any()).optional(),
   badges: z.array(z.any()).optional(),
   sections: z
     .strictObject({
