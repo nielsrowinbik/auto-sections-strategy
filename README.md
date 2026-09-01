@@ -22,7 +22,7 @@ The strategy is easily installable via [HACS](https://hacs.xyz/) (Home Assistant
 
 ### Manual installation
 
-1. Download the latest release from [`dist/auto-sections-strategy.js`](https://github.com/nielsrowinbik/auto-sections-strategy/blob/main/dist/auto-sections-strategy.js).
+1. Download [`auto-sections-strategy.js`](https://github.com/nielsrowinbik/auto-sections-strategy/releases/latest/download/auto-sections-strategy.js) from the latest release.
 2. Copy the file to your Home Assistant instance and place it in the `config/www` folder.
 3. Go to Configuration -> Lovelace Dashboards -> Resources -> Add Resource.
 4. Set the URL to `/local/auto-sections-strategy.js` and the Resource Type as `Javascript Module`.
