@@ -82,6 +82,7 @@ describe('config schema', () => {
     const config = configSchema.parse(base);
 
     expect(config.show_ungrouped).toBe(false);
+    expect(config.strip_group_name).toBe(true);
     expect(config.sort).toEqual({
       method: 'alphabetical',
       direction: 'ascending',

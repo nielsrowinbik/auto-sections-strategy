@@ -15,31 +15,59 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+// Entities tend to be named "<group> <thing>" or "<thing> <group>", so only strip
+// at the edges: a match in the middle is part of the name itself ("Kitchen Island
+// Kitchen Timer" should keep its island).
+function stripName(name: string, strip: string) {
+  const lower = name.toLowerCase();
+  const target = strip.toLowerCase();
+
+  let stripped = name;
+
+  if (lower.startsWith(target)) stripped = name.slice(strip.length);
+  else if (lower.endsWith(target))
+    stripped = name.slice(0, name.length - strip.length);
+
+  stripped = stripped.replace(/^[\s\-\u2013:]+|[\s\-\u2013:]+$/g, '');
+
+  // The name was nothing but the group name, so a nameless card is all we'd have left.
+  return stripped || name;
+}
+
 export function computeName(
   entity: HassEntity,
-  context: { area?: HassArea; device?: HassDevice }
+  device: HassDevice | undefined,
+  strip?: string
 ) {
-  const { area, device } = context;
-  const areaName = area?.name ?? '';
   const entityName =
     entity.name ?? entity.original_name ?? device?.name_by_user ?? device?.name;
 
   if (!entityName) return '';
 
-  return capitalizeFirstLetter(entityName.replace(areaName, '').trim());
+  return capitalizeFirstLetter(strip ? stripName(entityName, strip) : entityName);
 }
 
 export function generateCards(
   entities: HassEntity[],
-  card_options: StrategyConfig['card_options'],
+  config: StrategyConfig,
   context: HassContext
 ): LovelaceCardConfig[] {
+  const { card_options } = config;
+
   return entities
     .map((entity) => {
       const { entity_id } = entity;
       const domain = computeDomain(entity_id);
-      const device = findDevice(context.device, entity!.device_id);
-      const area = findArea(context.area, entity!.area_id ?? device?.area_id);
+      const entityContext = computeEntityContext(entity_id, context);
+
+      const groupKey = config.strip_group_name
+        ? computeGroupKey(entityContext, config.group_by)
+        : undefined;
+      // Strip the group's displayed name, not its key: the key is usually a slug
+      // that never appears in an entity's name.
+      const strip = groupKey
+        ? computeSectionTitle(groupKey, config.group_name, context)
+        : undefined;
 
       const generalCardConfig = card_options?.['_'] ?? {};
       const domainCardConfig = card_options?.[domain] ?? {};
@@ -47,7 +75,7 @@ export function generateCards(
 
       return {
         type: 'tile',
-        name: computeName(entity, { area, device }),
+        name: computeName(entity, entityContext.device, strip),
         ...generalCardConfig,
         ...domainCardConfig,
         ...entityCardConfig,
@@ -96,20 +124,27 @@ export function findFloor(
 export function computeSectionTitle(
   sectionKey: string,
   config: StrategyConfig['group_name'],
-  context: {
-    area: HassArea[];
-    device: HassDevice[];
-    entity: HassEntity[];
-  }
+  context: HassContext
 ): string {
   if (!config) return sectionKey;
 
   const [domain, rest] = config.split('.');
   const [key, field] = rest.split('|');
   const ctx = get(context, domain);
-  const title = ctx.find((obj: any) => obj[key] === sectionKey)[field];
+  const title = ctx.find((obj: any) => obj[key] === sectionKey)?.[field];
 
   return title ?? sectionKey;
+}
+
+export function computeGroupKey(
+  context: EntityContext,
+  group_by: StrategyConfig['group_by']
+): string | null | undefined {
+  if (typeof group_by === 'string') return get(context, group_by);
+
+  return group_by
+    .map((option) => get(context, option))
+    .filter((option) => !!option)[0];
 }
 
 export function computeEntityContext(

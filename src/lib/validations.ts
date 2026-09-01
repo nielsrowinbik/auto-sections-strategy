@@ -40,6 +40,7 @@ export const configSchema = z.strictObject({
   max_columns: z.optional(z.number().check(z.minimum(1), z.maximum(10))),
   group_by: z.union([z.string(), z.array(z.string())]),
   group_name: z.optional(z.string()),
+  strip_group_name: z._default(z.boolean(), true),
   filter: z.optional(
     z.object({
       include: z.optional(z.array(filter)),
