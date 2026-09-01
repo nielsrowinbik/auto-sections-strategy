@@ -37,6 +37,7 @@ views:
       options:
         group_by: <group_by>
         group_name: <group_name>
+        strip_group_name: <true or false>
         max_columns: <number between 1 and 10>
         filter:
           include:
@@ -67,6 +68,7 @@ views:
 
 - `group_by`: **Required**. How to divide the filtered entities among the sections.
 - `group_name`: How to determine the section's name.
+- `strip_group_name`: Remove the section's name from the names of the entities within it. Defaults to `true`.
 - `filter`:
   - `include`: A list of filters specifying which entities to include in the view.
   - `exclude`: A list of filters specifying which entities to exclude from the view.
@@ -90,6 +92,14 @@ Setting the group name happens by supplying a single string in a given format: `
 In the area example, we group by `area_id`, and so we tell the strategy to find area's by their `area_id`, but use the `name` field for the section title instead, hence our configuration is `area.area_id|name`.
 
 I'm open to suggestions on how to make this easier and/or make more sense, just open an issue.
+
+### Strip group name
+
+Entities are often named after the thing you're grouping by, which gets repetitive: a section titled "Kitchen" full of cards reading "Kitchen lights", "Kitchen blinds", "Kitchen motion". By default the strategy removes the section's name from the names of the cards within it, leaving "Lights", "Blinds" and "Motion". Set `strip_group_name: false` to keep the full names.
+
+The name is only removed when it sits at the start or the end of the entity's name, and the match ignores case. If removing it would leave the card without a name at all, the full name is kept.
+
+What gets removed is the section's *displayed* name, which means this only does something when that name actually appears in your entity names. If you group by `area.area_id` without setting `group_name`, the section is titled `kitchen` (the area's ID), and no entity is called "kitchen lights", so nothing is removed. Set `group_name: area.area_id|name` and you get "Kitchen" as the section title, which does match.
 
 ### Filters
 
@@ -142,6 +152,8 @@ Within the `card_options` object you may specify how to alter the rendered cards
 1. Configuration within the special `_` key will be applied to all cards.
 2. Specifying keys for a domain such as `light` will apply the configuration to all cards for entities within that domain.
 3. Specifying keys for a specific entity such as `fan.master_bedroom_fan` will apply the configuration to all cards with that specific entity.
+
+Card names are generated from the entity's name, with the section's name removed unless you turn that off. See [Strip group name](#strip-group-name). Setting `name` through `card_options` overrides this entirely.
 
 ### Sections
 

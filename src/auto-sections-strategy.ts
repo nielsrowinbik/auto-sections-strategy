@@ -16,10 +16,10 @@ import type { StrategyConfig } from './lib/validations';
 import { filter } from './lib/filters';
 import {
   computeEntityContext,
+  computeGroupKey,
   computeSectionTitle,
   generateCards,
 } from './lib/utils';
-import { get } from 'lodash-es';
 import { sort } from './lib/sorts';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
@@ -65,22 +65,20 @@ class AutoSectionsStrategy extends HTMLTemplateElement {
         );
       });
 
-    const cards = generateCards(entities, config.card_options, hassContext);
-
-    const { group_by } = config;
+    const cards = generateCards(entities, config, hassContext);
 
     // @ts-expect-error
     const grouped: Record<string, LovelaceCardConfig[]> = Object.groupBy(
       cards,
-      (card: LovelaceCardConfig) => {
-        const context = computeEntityContext(card.entity, hassContext);
-
-        if (typeof group_by === 'string') return get(context, group_by);
-
-        return group_by
-          .map((option) => get(context, option))
-          .filter((option) => !!option)[0];
-      }
+      // Missing keys stringify to 'undefined'/'null', which is how the ungrouped
+      // bucket is recognised below.
+      (card: LovelaceCardConfig) =>
+        String(
+          computeGroupKey(
+            computeEntityContext(card.entity, hassContext),
+            config.group_by
+          )
+        )
     );
 
     const { method, direction, ...options } = config.sort;
