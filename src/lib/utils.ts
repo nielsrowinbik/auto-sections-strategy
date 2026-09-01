@@ -9,7 +9,7 @@ import type {
   HassFloor,
 } from './types';
 import type { StrategyConfig } from './validations';
-import get from 'lodash.get';
+import { get } from 'lodash-es';
 
 export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);

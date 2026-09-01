@@ -72,7 +72,7 @@ views:
   - `exclude`: A list of filters specifying which entities to exclude from the view.
 - `show_ungrouped`: Show or hide entities that were included by the filter rules but could not be grouped using the `group_by` setting. Defaults to `false`.
 - `card_options`: Options to add to certain cards.
-- `sections`: Add your own custom sections to the top or bottom of the generated list. Sections defined here must be of `type: grid`.
+- `sections`: Add your own custom sections to the top or bottom of the generated list.
 - `badges`: Add badges to your automatically generated dashboard.
 
 ### Group by
@@ -142,3 +142,28 @@ Within the `card_options` object you may specify how to alter the rendered cards
 1. Configuration within the special `_` key will be applied to all cards.
 2. Specifying keys for a domain such as `light` will apply the configuration to all cards for entities within that domain.
 3. Specifying keys for a specific entity such as `fan.master_bedroom_fan` will apply the configuration to all cards with that specific entity.
+
+### Sections
+
+Use `sections.top` and `sections.bottom` to place your own sections before or after the generated ones. Each entry is a regular Home Assistant grid section, so it must have `type: grid` and a list of `cards`, and every other option a native section accepts is passed through to the view unchanged. That includes `column_span`, `visibility` and `background`, as well as anything Home Assistant adds later.
+
+```yaml
+max_columns: 3
+sections:
+  top:
+    - type: grid
+      column_span: 3
+      cards:
+        - type: heading
+          heading: Good morning
+  bottom:
+    - type: grid
+      visibility:
+        - condition: user
+          users:
+            - 581fbc5cfc854f9a86b3d7d5f5b0d6f0
+      cards:
+        - type: entities
+          entities:
+            - input_boolean.guest_mode
+```
