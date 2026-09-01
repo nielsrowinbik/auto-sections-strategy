@@ -16,7 +16,10 @@ const filter = z
 
 export type FilterConfig = z.infer<typeof filter>;
 
-const section = z.strictObject({
+// Loose rather than strict: the shape belongs to Home Assistant, not to us, so
+// any other property of a native grid section (`column_span`, `visibility`,
+// `background`, ...) is accepted and passed through untouched.
+const section = z.looseObject({
   title: z.string().optional(),
   type: z.literal('grid'),
   cards: z.array(z.any()),

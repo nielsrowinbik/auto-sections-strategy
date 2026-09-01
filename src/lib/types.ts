@@ -62,4 +62,6 @@ export type LovelaceViewSection = {
   title?: string;
   type: 'grid';
   cards: LovelaceCardConfig[];
+  // Native grid-section options the user passed through verbatim.
+  [key: string]: unknown;
 };
