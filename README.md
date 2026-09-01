@@ -111,10 +111,63 @@ Filters have the following options, and will match any entity fulfilling **ALL**
 - `attribute`: Expects an object of attributes. Will match for entities matching all attributes exactly. Useful for filtering by `device_class`, for example
 - `device`: Match entities belonging to a certain device
 - `domain`: Match entity domain (such as `light`, `climate`, `media_player`)
+- `entity_id`: Match a specific entity
+- `expand`: Not a filter of its own. See [Groups](#groups)
 - `floor`: Match entities belonging to a certain floor
 - `state`: Match entity state (such as `on`, `off`, etc.)
 - `hidden`: Match entities that have been hidden from the UI or not
 - `label`: Match entities that have a certain label
+
+Every option except `attribute` and `hidden` also takes a list, which matches when **ANY** of its values does. So instead of a separate entry per domain, you can write:
+
+```yaml
+filter:
+  include:
+    - domain:
+        - light
+        - switch
+        - climate
+```
+
+#### Combining options
+
+Because a filter matches only when all of its options match, putting two options on the same list entry narrows the result. This, for example, matches occupancy sensors and nothing else:
+
+```yaml
+filter:
+  include:
+    - domain: binary_sensor
+      attribute:
+        device_class: occupancy
+```
+
+Put them on separate entries and you get every binary sensor plus everything with an occupancy device class instead.
+
+#### Groups
+
+Set `expand: true` to use a group's members rather than the group entity itself:
+
+```yaml
+filter:
+  include:
+    - entity_id: light.all_valid_lights
+      expand: true
+```
+
+This reads the `entity_id` attribute of whatever entity you name, so it works for the group helpers in the `light`, `switch`, `cover`, `fan` and `media_player` domains, for old-style `group.*` groups, and for anything else that lists its members that way. Groups within groups are flattened. Naming an entity that isn't a group leaves it as it is.
+
+#### Templates
+
+`entity_id` also takes a [Jinja template](https://www.home-assistant.io/docs/configuration/templating/), which should return an entity id or a list of them. The result behaves like any other `entity_id` value, so it still combines with the rest of the filter:
+
+```yaml
+filter:
+  include:
+    - entity_id: "{{ area_entities('living_room') }}"
+      domain: light
+```
+
+The strategy keeps the template subscribed and rebuilds the view when its result changes, so you don't need to reload the dashboard. The same goes for the `state` and `attribute` filters, and for `expand`. This needs Home Assistant 2026.7 or later; on older versions everything still works, it's just evaluated once per dashboard load.
 
 ### Sort
 

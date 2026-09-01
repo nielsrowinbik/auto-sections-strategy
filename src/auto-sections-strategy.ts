@@ -4,16 +4,14 @@ import type {
   LovelaceCardConfig,
 } from 'custom-card-helpers';
 import { configSchema } from './lib/validations';
-import type {
-  HassArea,
-  HassContext,
-  HassDevice,
-  HassEntity,
-  HassFloor,
-  LovelaceViewSection,
-} from './lib/types';
+import type { LovelaceViewSection } from './lib/types';
 import type { StrategyConfig } from './lib/validations';
-import { filter } from './lib/filters';
+import { filter, resolveFilter } from './lib/filters';
+import {
+  REGISTRY_DEPENDENCIES,
+  loadHassContext,
+  shouldRegenerate,
+} from './lib/registry';
 import {
   computeEntityContext,
   computeGroupKey,
@@ -23,46 +21,43 @@ import {
 import { sort } from './lib/sorts';
 
 class AutoSectionsStrategy extends HTMLTemplateElement {
+  static registryDependencies = REGISTRY_DEPENDENCIES;
+
+  // Home Assistant calls this on every `hass` update and re-runs `generate`
+  // when it returns true, debounced and with an equality check on the result.
+  // Supported from Home Assistant 2026.7; older versions ignore it and fall
+  // back to regenerating on registry changes only.
+  static shouldRegenerate = shouldRegenerate;
+
   static async generate(
     userConfig: StrategyConfig,
     hass: HomeAssistant
   ): Promise<LovelaceViewConfig> {
     const config = configSchema.parse(userConfig);
 
-    const [allEntities, allAreas, allDevices, allFloors] = await Promise.all([
-      hass.callWS<HassEntity[]>({ type: 'config/entity_registry/list' }),
-      hass.callWS<HassArea[]>({ type: 'config/area_registry/list' }),
-      hass.callWS<HassDevice[]>({ type: 'config/device_registry/list' }),
-      hass.callWS<HassFloor[]>({ type: 'config/floor_registry/list' }),
+    const hassContext = await loadHassContext(hass);
+
+    const [include, exclude] = await Promise.all([
+      Promise.all(
+        (config.filter?.include ?? []).map((f) => resolveFilter(hass, f))
+      ),
+      Promise.all(
+        (config.filter?.exclude ?? []).map((f) => resolveFilter(hass, f))
+      ),
     ]);
 
-    const hassContext: HassContext = {
-      entity: allEntities,
-      area: allAreas,
-      device: allDevices,
-      floor: allFloors,
-    };
-
-    const entities = allEntities
+    const entities = hassContext.entity
       // Apply `include` filters:
       .filter((entity) => {
         const context = computeEntityContext(entity.entity_id, hassContext);
 
-        return (
-          config.filter?.include
-            ?.map((userFilter) => filter(hass, userFilter, context))
-            .some((val) => val === true) ?? false
-        );
+        return include.some((userFilter) => filter(hass, userFilter, context));
       })
       // Apply `exclude` filters:
       .filter((entity) => {
         const context = computeEntityContext(entity.entity_id, hassContext);
 
-        return (
-          !config.filter?.exclude
-            ?.map((userFilter) => filter(hass, userFilter, context))
-            .some((val) => val === true)
-        );
+        return !exclude.some((userFilter) => filter(hass, userFilter, context));
       });
 
     const cards = generateCards(entities, config, hassContext);

@@ -67,6 +67,48 @@ describe('custom sections', () => {
   });
 });
 
+describe('filters', () => {
+  const parse = (filters: unknown[]) =>
+    configSchema.parse({ ...base, filter: { include: filters } }).filter
+      ?.include;
+
+  it('takes a single value or a list for every scalar filter', () => {
+    for (const key of [
+      'area',
+      'device',
+      'domain',
+      'entity_id',
+      'floor',
+      'state',
+      'label',
+    ]) {
+      expect(parse([{ [key]: 'a' }])).toEqual([{ [key]: 'a' }]);
+      expect(parse([{ [key]: ['a', 'b'] }])).toEqual([{ [key]: ['a', 'b'] }]);
+      expect(() => parse([{ [key]: 1 }])).toThrow();
+    }
+  });
+
+  it('accepts expand alongside entity_id', () => {
+    expect(parse([{ entity_id: 'light.group', expand: true }])).toEqual([
+      { entity_id: 'light.group', expand: true },
+    ]);
+  });
+
+  it('accepts several keys on one filter', () => {
+    expect(
+      parse([
+        { domain: 'binary_sensor', attribute: { device_class: 'occupancy' } },
+      ])
+    ).toEqual([
+      { domain: 'binary_sensor', attribute: { device_class: 'occupancy' } },
+    ]);
+  });
+
+  it('rejects unknown filter keys', () => {
+    expect(() => parse([{ domain_: 'light' }])).toThrow();
+  });
+});
+
 describe('config schema', () => {
   it('rejects unknown top-level options', () => {
     expect(() => configSchema.parse({ ...base, group_bye: 'oops' })).toThrow();

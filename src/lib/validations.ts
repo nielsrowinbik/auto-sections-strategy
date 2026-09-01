@@ -2,17 +2,25 @@
 // bundle. This file ships to browsers as part of the dashboard resource.
 import * as z from 'zod/mini';
 
+// Every scalar filter takes either a single value or a list of them; a list
+// matches when any of its values does.
+const stringOrList = z.union([z.string(), z.array(z.string())]);
+
 const filter = z.partial(
   z.strictObject({
-    area: z.string(),
+    area: stringOrList,
     attribute: z.record(z.string(), z.string()),
-    device: z.string(),
-    domain: z.string(),
-    entity_id: z.string(),
-    floor: z.string(),
+    device: stringOrList,
+    domain: stringOrList,
+    // May also be a template returning an entity id or a list of them.
+    entity_id: stringOrList,
+    // Not a filter of its own: replaces each `entity_id` with the members of
+    // the group it names.
+    expand: z.boolean(),
+    floor: stringOrList,
     hidden: z.boolean(),
-    state: z.string(),
-    label: z.string(),
+    state: stringOrList,
+    label: stringOrList,
   })
 );
 
