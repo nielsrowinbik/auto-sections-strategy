@@ -88,6 +88,12 @@ describe('config schema', () => {
     });
   });
 
+  it('enforces the max_columns bounds', () => {
+    expect(configSchema.parse({ ...base, max_columns: 3 }).max_columns).toBe(3);
+    expect(() => configSchema.parse({ ...base, max_columns: 0 })).toThrow();
+    expect(() => configSchema.parse({ ...base, max_columns: 11 })).toThrow();
+  });
+
   it('validates the records that changed shape in zod 4', () => {
     const config = configSchema.parse({
       ...base,
