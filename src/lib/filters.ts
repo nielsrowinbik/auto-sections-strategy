@@ -93,10 +93,12 @@ const STATE_DEPENDENT: string[] = ['state', 'attribute'];
 // extra render.
 export function usesStateFilters(config: any): boolean {
   try {
-    return [
-      ...(config?.filter?.include ?? []),
-      ...(config?.filter?.exclude ?? []),
-    ].some(
+    // Unlike `generate`, which is handed the config with the legacy `options`
+    // nesting already flattened out, this gets the raw strategy config. Both
+    // shapes are in the wild, and the nested one is the documented one.
+    const { filter } = config?.options ?? config ?? {};
+
+    return [...(filter?.include ?? []), ...(filter?.exclude ?? [])].some(
       // Group membership lives in the group entity's attributes, so `expand`
       // is state-dependent too.
       (filter) =>

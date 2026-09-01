@@ -219,4 +219,16 @@ describe('usesStateFilters', () => {
   it('errs towards regenerating on a config it cannot read', () => {
     expect(usesStateFilters({ filter: { include: ['nonsense'] } })).toBe(true);
   });
+  // Home Assistant flattens `options` before calling `generate`, but not before
+  // calling `shouldRegenerate`, and `options` is the documented config shape.
+  it('reads the legacy options nesting too', () => {
+    expect(
+      usesStateFilters({ options: { filter: { include: [{ state: 'on' }] } } })
+    ).toBe(true);
+    expect(
+      usesStateFilters({
+        options: { filter: { include: [{ domain: 'light' }] } },
+      })
+    ).toBe(false);
+  });
 });
