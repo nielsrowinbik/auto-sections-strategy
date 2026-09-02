@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v1.0.0...v1.0.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **release:** recognise the feat! breaking change shorthand ([#30](https://github.com/nielsrowinbik/auto-sections-strategy/issues/30)) ([8638c1a](https://github.com/nielsrowinbik/auto-sections-strategy/commit/8638c1a45acc62781232c3b362410719052a5d08))
+
 # [1.0.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.5.0...v1.0.0) (2026-09-02)
 
 # [0.5.0](https://github.com/nielsrowinbik/auto-sections-strategy/compare/v0.4.0...v0.5.0) (2026-09-01)
