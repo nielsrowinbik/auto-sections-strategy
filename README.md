@@ -1,3 +1,7 @@
+# 🗄️ ARCHIVED
+
+This strategy is archived as it's been functionally replaced by [automatic sections](https://www.home-assistant.io/dashboards/sections/#adding-an-automatic-section), launched in Home Assistant 2026.11. You can still use older versions, but this strategy will not receive updates anymore.
+
 # Lovelace Auto Sections Strategy
 
 ## What is the Auto Sections Strategy?
